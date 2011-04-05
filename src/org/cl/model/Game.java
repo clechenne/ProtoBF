@@ -5,4 +5,11 @@ public class Game {
 	public int turn;
 	
 	public Ship[] ships;
+
+	public void moveAlls() {
+		for (Ship s : ships) {
+			// TODO: Gerer la vitesse reelle.
+			s.move(90);
+		}
+	}
 }

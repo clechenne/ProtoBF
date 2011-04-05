@@ -10,6 +10,7 @@ public class TurnRunner {
 	}
 
 	public void end() {
+		game.moveAlls();
 		game.turn++;	
 	}
 
