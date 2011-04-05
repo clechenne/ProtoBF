@@ -1,6 +1,5 @@
 package org.cl.model;
 
-import java.math.BigDecimal;
 
 public class Ship {
 	public String name;
@@ -25,10 +24,16 @@ public class Ship {
 		
 		double cos = Math.cos(Math.toRadians(heading));
 		double sin = Math.sin(Math.toRadians(heading));
-				
-		if (heading <= 90) {
+		
+		if (heading <= 180) {
+			x += (int) (speed*sin);
+			y -= (int) (speed*cos);
+		} else if (heading <= 270) {
 			x += (int) (speed*sin);
 			y += (int) (speed*cos);
+		} else if (heading <= 360) {
+			x += (int) (speed*sin);
+			y -= (int) (speed*cos);
 		}
 	}
 }

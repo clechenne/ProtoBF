@@ -7,33 +7,40 @@ import org.junit.Test;
 
 public class ShipMoveTest {
 	
-	@Test public void moveAheadHeading90() {
-		
-		Ship ship = FactoryTest.newShip(90, 18);
+	private void core(int heading, int speed, int expectedX, int expectedY) {
+		Ship ship = FactoryTest.newShip(heading, speed);
 		
 		ship.move(90);
 		
-		Assert.assertEquals("Bad position", 190, ship.x);
-		Assert.assertEquals("Bad position", 100, ship.y);
+		Assert.assertEquals("Bad position", expectedX, ship.x);
+		Assert.assertEquals("Bad position", expectedY, ship.y);
+	}
+	
+	@Test public void moveAheadHeading90() {		
+		core(90, 18, 190, 100);
 	}
 	
 	@Test public void moveAheadHeading45() {
-		
-		Ship ship = FactoryTest.newShip(45, 18);
-		
-		ship.move(90);
-		
-		Assert.assertEquals("Bad position", 163, ship.x);
-		Assert.assertEquals("Bad position", 163, ship.y);
+		core(45, 18, 163, 37);
 	}
 
 	@Test public void moveAheadHeading0() {
-		
-		Ship ship = FactoryTest.newShip(0, 18);
-		
-		ship.move(90);
-		
-		Assert.assertEquals("Bad position", 100, ship.x);
-		Assert.assertEquals("Bad position", 190, ship.y);
-	}	
+		core(0, 18, 100, 10);
+	}
+	
+	@Test public void moveAheadHeading135() {
+		core(135, 18, 163, 163);
+	}
+	
+	@Test public void moveAheadHeading180() {
+		core(180, 18, 100, 190);
+	}
+	
+	@Test public void moveAheadHeading270() {
+		core(270, 18, 10, 100);
+	}
+	
+	@Test public void moveAheadHeading315() {
+		core(315, 18, 37, 37);
+	}
 }
