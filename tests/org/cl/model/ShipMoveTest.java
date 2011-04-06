@@ -2,6 +2,7 @@ package org.cl.model;
 
 import junit.framework.Assert;
 
+import org.cl.exceptions.ShipMoveException;
 import org.cl.utils.FactoryTest;
 import org.junit.Test;
 
@@ -10,22 +11,27 @@ public class ShipMoveTest {
 	private void core(int heading, int speed, int expectedX, int expectedY) {
 		Ship ship = FactoryTest.newShip(heading, speed);
 		
-		ship.move(90);
+		try {
+			ship.move(90);
+		} catch (ShipMoveException e) {
+			// TODO Auto-generated catch block
+			throw new IllegalStateException(e);
+		}
 		
 		Assert.assertEquals("Bad position", expectedX, ship.x);
 		Assert.assertEquals("Bad position", expectedY, ship.y);
 	}
 	
-	@Test public void moveAheadHeading90() {		
-		core(90, 18, 190, 100);
+	@Test public void moveAheadHeading0() {
+		core(0, 18, 100, 10);
 	}
-	
+
 	@Test public void moveAheadHeading45() {
 		core(45, 18, 163, 37);
 	}
 
-	@Test public void moveAheadHeading0() {
-		core(0, 18, 100, 10);
+	@Test public void moveAheadHeading90() {		
+		core(90, 18, 190, 100);
 	}
 	
 	@Test public void moveAheadHeading135() {
@@ -34,6 +40,10 @@ public class ShipMoveTest {
 	
 	@Test public void moveAheadHeading180() {
 		core(180, 18, 100, 190);
+	}
+
+	@Test public void moveAheadHeading225() {
+		core(225, 18, 37, 37);
 	}
 	
 	@Test public void moveAheadHeading270() {

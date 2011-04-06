@@ -1,5 +1,8 @@
 package org.cl.model;
 
+import org.cl.exceptions.ShipMoveException;
+import org.cl.util.SpeedBoxInit;
+
 
 public class Ship {
 	public String name;
@@ -8,7 +11,8 @@ public class Ship {
 	public String nationality;
 	
 	// speed
-	public float[] speedBoxes;
+	public int[] speedBoxes;
+	// 0 to speedBoxes.size-1
 	public int currentSpeedBox;
 	
 	// position
@@ -18,10 +22,17 @@ public class Ship {
 	
 	public Ship(Type type, int speed) {
 		this.speed = speed;
-		speedBoxes = new float[type.nbSpeedBoxes];
+		
+		this.type = type;
+		
+		speedBoxes = SpeedBoxInit.execute(type, speed);
 	}
 
-	public void move(int realSpeed) {
+	public void move(int realSpeed) throws ShipMoveException {
+		
+		if (!check(realSpeed)) {
+			throw new ShipMoveException("no more than one speedBox change");
+		}
 		
 		double cos = Math.cos(Math.toRadians(heading));
 		double sin = Math.sin(Math.toRadians(heading));
@@ -36,5 +47,36 @@ public class Ship {
 			x += (int) (realSpeed*sin);
 			y -= (int) (realSpeed*cos);
 		}
+		
+		// after moving speedBox can change
+		if (realSpeed < speedBoxes[currentSpeedBox]) {
+			currentSpeedBox--;
+		}
+		
+		if (realSpeed > speedBoxes[currentSpeedBox]) {
+			currentSpeedBox++;
+		}
+	}
+
+	private boolean check(int realSpeed) {
+		if (realSpeed < getMinSpeedChange() || realSpeed > getMaxSpeedChange()) {
+			return false;
+		}
+		return true;
+			
+	}
+
+	private int getMaxSpeedChange() {
+		if (currentSpeedBox < speedBoxes.length-1) {
+			return speedBoxes[currentSpeedBox+1];
+		}
+		return speedBoxes[speedBoxes.length-1];
+	}
+
+	private int getMinSpeedChange() {
+		if (currentSpeedBox > 1) {
+			return speedBoxes[currentSpeedBox-1];
+		}
+		return speedBoxes[0];
 	}
 }

@@ -1,5 +1,7 @@
 package org.cl.model;
 
+import org.cl.exceptions.ShipMoveException;
+
 public class Game {
 	public String name;
 	public int turn;
@@ -9,7 +11,12 @@ public class Game {
 	public void moveAlls() {
 		for (Ship s : ships) {
 			// TODO: Gerer la vitesse reelle.
-			s.move(90);
+			try {
+				s.move(90);
+			} catch (ShipMoveException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }

@@ -12,7 +12,7 @@ public class FactoryTest {
 		inst.heading = heading;
 		inst.x = 100;
 		inst.y = 100;
-		inst.currentSpeedBox = 5;
+		inst.currentSpeedBox = 4;
 		
 		return inst;
 	}
