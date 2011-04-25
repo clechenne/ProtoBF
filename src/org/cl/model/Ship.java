@@ -2,6 +2,7 @@ package org.cl.model;
 
 import org.cl.exceptions.ShipMoveException;
 import org.cl.util.SpeedBoxInit;
+import org.cl.util.TurnCalculator;
 
 
 public class Ship {
@@ -16,11 +17,13 @@ public class Ship {
 	public int currentSpeedBox;
 	
 	// position
-	public int x;
-	public int y;
+	public Point pos;
 	public int heading;
+	public int targetHeading;
+	private boolean turnPort;
 	
 	public Ship(Type type, int speed) {
+		pos = new Point(0,0);
 		this.speed = speed;
 		
 		this.type = type;
@@ -28,38 +31,50 @@ public class Ship {
 		speedBoxes = SpeedBoxInit.execute(type, speed);
 	}
 
-	public void move(int realSpeed) throws ShipMoveException {
+	public void move(int realDistance) throws ShipMoveException {
 		
-		if (!check(realSpeed)) {
+		if (!check(realDistance)) {
 			throw new ShipMoveException("no more than one speedBox change");
+		}
+		
+		if (targetHeading > 0) {
+			newPositionOnCircle(realDistance);
 		}
 		
 		double cos = Math.cos(Math.toRadians(heading));
 		double sin = Math.sin(Math.toRadians(heading));
 		
 		if (heading <= 180) {
-			x += (int) (realSpeed*sin);
-			y -= (int) (realSpeed*cos);
+			pos.x += (int) (realDistance*sin);
+			pos.y -= (int) (realDistance*cos);
 		} else if (heading <= 270) {
-			x += (int) (realSpeed*sin);
-			y += (int) (realSpeed*cos);
+			pos.x += (int) (realDistance*sin);
+			pos.y += (int) (realDistance*cos);
 		} else if (heading <= 360) {
-			x += (int) (realSpeed*sin);
-			y -= (int) (realSpeed*cos);
+			pos.x += (int) (realDistance*sin);
+			pos.y -= (int) (realDistance*cos);
 		}
 		
 		// after moving speedBox can change
-		if (realSpeed < speedBoxes[currentSpeedBox]) {
+		if (realDistance < speedBoxes[currentSpeedBox]) {
 			currentSpeedBox--;
 		}
 		
-		if (realSpeed > speedBoxes[currentSpeedBox]) {
+		if (realDistance > speedBoxes[currentSpeedBox]) {
 			currentSpeedBox++;
 		}
 	}
 
-	private boolean check(int realSpeed) {
-		if (realSpeed < getMinSpeedChange() || realSpeed > getMaxSpeedChange()) {
+	private void newPositionOnCircle(int realDistance) {
+		TurnCalculator tc = new TurnCalculator(pos, turnPort, realDistance);
+		
+		pos = tc.execute();
+		
+		heading += tc.degree;
+	}
+
+	private boolean check(int realDistance) {
+		if (realDistance < getMinSpeedChange() || realDistance > getMaxSpeedChange()) {
 			return false;
 		}
 		return true;
@@ -78,5 +93,10 @@ public class Ship {
 			return speedBoxes[currentSpeedBox-1];
 		}
 		return speedBoxes[0];
+	}
+
+	public void turnPort(int target) {
+		targetHeading = target;
+		turnPort = true;
 	}
 }

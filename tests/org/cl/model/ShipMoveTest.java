@@ -9,7 +9,7 @@ import org.junit.Test;
 public class ShipMoveTest {
 	
 	private void core(int heading, int speed, int expectedX, int expectedY) {
-		Ship ship = FactoryTest.newShip(heading, speed);
+		Ship ship = FactoryTest.newShip(heading, speed, 4);
 		
 		try {
 			ship.move(90);
@@ -18,8 +18,8 @@ public class ShipMoveTest {
 			throw new IllegalStateException(e);
 		}
 		
-		Assert.assertEquals("Bad position", expectedX, ship.x);
-		Assert.assertEquals("Bad position", expectedY, ship.y);
+		Assert.assertEquals("Bad position", expectedX, ship.pos.x);
+		Assert.assertEquals("Bad position", expectedY, ship.pos.y);
 	}
 	
 	@Test public void moveAheadHeading0() {
