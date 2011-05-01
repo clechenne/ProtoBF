@@ -19,4 +19,13 @@ public class Game {
 			}
 		}
 	}
+
+	public Ship getShip(int id) {
+		for (Ship s : ships) {
+			if (s.id == id) {
+				return s;
+			}
+		}
+		return null;
+	}
 }

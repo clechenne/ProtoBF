@@ -9,7 +9,7 @@ import org.junit.Test;
 public class ShipMoveTest {
 	
 	private void core(int heading, int speed, int expectedX, int expectedY) {
-		Ship ship = FactoryTest.newShip(heading, speed, 4);
+		Ship ship = FactoryTest.newShip(0, heading, speed, 4);
 		
 		try {
 			ship.move(90);

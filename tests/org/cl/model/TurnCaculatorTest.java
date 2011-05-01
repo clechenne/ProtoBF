@@ -27,7 +27,7 @@ public class TurnCaculatorTest {
 	@Test public void portDistance138() throws ShipMoveException {
 		doIt(100, 100, true, 138, 100, 180);
 	}
-	
+		
 	private void doIt(int x, int y, boolean port, int distance, int expX, int expY) {
 		TurnCalculator tc = new TurnCalculator(new Point(x, y), port, distance);
 		

@@ -23,7 +23,7 @@ public class TurnCalculator {
 		
 		Point nP = new Point(0, 0 );
 		
-		degree = (180*distanceToTurn) / 138;
+		degree = Converter.distanceToDegree(distanceToTurn);
 		
 		double factorX = Math.sin(Math.toRadians(degree));
 		double factorY = Math.cos(Math.toRadians(degree));

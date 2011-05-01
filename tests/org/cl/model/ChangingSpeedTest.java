@@ -15,7 +15,7 @@ public class ChangingSpeedTest {
 	@Test(expected=ShipMoveException.class)
 	public void changeKo() throws ShipMoveException {
 		// 18 => 108 - 90 - 72 - 54 - 36 - 18
-		Ship ship = FactoryTest.newShip(0, 18, 4);
+		Ship ship = FactoryTest.newShip(0, 0, 18, 4);
 		
 		ship.move(54);
 	}
@@ -23,7 +23,7 @@ public class ChangingSpeedTest {
 	@Test
 	public void changeOk() throws ShipMoveException {
 		// 18 => 108 - 90 - 72 - 54 - 36 - 18
-		Ship ship = FactoryTest.newShip(0, 18, 4);
+		Ship ship = FactoryTest.newShip(0, 0, 18, 4);
 		
 		// spBox 4 -> 5
 		ship.move(72);

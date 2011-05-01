@@ -1,11 +1,13 @@
 package org.cl.model;
 
 import org.cl.exceptions.ShipMoveException;
+import org.cl.util.Converter;
 import org.cl.util.SpeedBoxInit;
 import org.cl.util.TurnCalculator;
 
 
 public class Ship {
+	public int id;
 	public String name;
 	public Type type;
 	public int speed;
@@ -22,7 +24,8 @@ public class Ship {
 	public int targetHeading;
 	private boolean turnPort;
 	
-	public Ship(Type type, int speed) {
+	public Ship(int id, Type type, int speed) {
+		this.id = id;
 		pos = new Point(0,0);
 		this.speed = speed;
 		
@@ -33,12 +36,14 @@ public class Ship {
 
 	public void move(int realDistance) throws ShipMoveException {
 		
+		int distanceToUse = realDistance;
+		
 		if (!check(realDistance)) {
 			throw new ShipMoveException("no more than one speedBox change");
 		}
 		
 		if (targetHeading > 0) {
-			newPositionOnCircle(realDistance);
+			distanceToUse -= newPositionOnCircle(realDistance);
 		}
 		
 		double cos = Math.cos(Math.toRadians(heading));
@@ -65,12 +70,29 @@ public class Ship {
 		}
 	}
 
-	private void newPositionOnCircle(int realDistance) {
-		TurnCalculator tc = new TurnCalculator(pos, turnPort, realDistance);
+	private int newPositionOnCircle(int realDistance) {
+		
+		int distance = Converter.degreeToDistance(targetHeading-heading);
+		
+		int distanceForTurn = realDistance;
+		
+		if (distance < realDistance) {
+			distanceForTurn = distance;
+		}
+		
+		TurnCalculator tc = new TurnCalculator(pos, turnPort, distanceForTurn);
 		
 		pos = tc.execute();
 		
 		heading += tc.degree;
+		
+		// is target Heading reached ?
+		if (targetHeading == heading) {
+			targetHeading = 0 ;
+		}
+		
+		return distanceForTurn;
+		
 	}
 
 	private boolean check(int realDistance) {
