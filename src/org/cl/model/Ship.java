@@ -10,8 +10,20 @@ public class Ship {
 	public int id;
 	public String name;
 	public Type type;
+	public int size;
+	
 	public int speed;
 	public String nationality;
+	public Side side;
+	
+	// Armor
+	public int armorVitals ;
+	public int armorUpperworks;
+	
+	public Level upperworksProtection;
+	public Level floodProtection;
+	public Level stability;
+	public Level seawayRating;
 	
 	// speed
 	public int[] speedBoxes;
@@ -23,6 +35,8 @@ public class Ship {
 	public int heading;
 	public int targetHeading;
 	private boolean turnPort;
+	
+	public Weapon weapons[];
 	
 	public Ship(int id, Type type, int speed) {
 		this.id = id;
@@ -69,7 +83,12 @@ public class Ship {
 			currentSpeedBox++;
 		}
 	}
-
+	
+	public void turnPort(int target) {
+		targetHeading = target;
+		turnPort = true;
+	}
+	
 	private int newPositionOnCircle(int realDistance) {
 		
 		int distance = Converter.degreeToDistance(targetHeading-heading);
@@ -117,8 +136,5 @@ public class Ship {
 		return speedBoxes[0];
 	}
 
-	public void turnPort(int target) {
-		targetHeading = target;
-		turnPort = true;
-	}
+
 }
