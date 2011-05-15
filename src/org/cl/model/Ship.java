@@ -13,7 +13,6 @@ public class Ship {
 	public int size;
 	
 	public int speed;
-	public String nationality;
 	public Side side;
 	
 	// Armor
@@ -31,9 +30,12 @@ public class Ship {
 	public int currentSpeedBox;
 	
 	// position
+	public Point oldPos;
 	public Point pos;
 	public int heading;
 	public int targetHeading;
+	
+	// port = babord, starboard = tribord.
 	private boolean turnPort;
 	
 	public Weapon weapons[];
@@ -63,6 +65,8 @@ public class Ship {
 		double cos = Math.cos(Math.toRadians(heading));
 		double sin = Math.sin(Math.toRadians(heading));
 		
+		oldPos = new Point(pos.x, pos.y);
+				
 		if (heading <= 180) {
 			pos.x += (int) (realDistance*sin);
 			pos.y -= (int) (realDistance*cos);
@@ -73,6 +77,8 @@ public class Ship {
 			pos.x += (int) (realDistance*sin);
 			pos.y -= (int) (realDistance*cos);
 		}
+		
+		System.out.println(""+ id + oldPos + "->" + pos);
 		
 		// after moving speedBox can change
 		if (realDistance < speedBoxes[currentSpeedBox]) {
@@ -87,6 +93,11 @@ public class Ship {
 	public void turnPort(int target) {
 		targetHeading = target;
 		turnPort = true;
+	}
+
+	public void turnStarboard(int target) {
+		targetHeading = target;
+		turnPort = false;
 	}
 	
 	private int newPositionOnCircle(int realDistance) {
@@ -103,7 +114,15 @@ public class Ship {
 		
 		pos = tc.execute();
 		
-		heading += tc.degree;
+		int oldHeading = heading;
+		
+		if (turnPort)
+			heading += tc.degree;
+		else 
+			heading += tc.degree;
+		
+		System.out.println("" + id + " degree:" + tc.degree);
+		System.out.println("" + id + " oHead:" + oldHeading + " -> " + heading);
 		
 		// is target Heading reached ?
 		if (targetHeading == heading) {
@@ -135,6 +154,11 @@ public class Ship {
 		}
 		return speedBoxes[0];
 	}
+
+	public int getCurrentSpeed() {
+		return speedBoxes[currentSpeedBox];
+	}
+
 
 
 }

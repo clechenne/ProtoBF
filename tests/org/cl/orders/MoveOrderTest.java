@@ -13,6 +13,7 @@ public class MoveOrderTest {
 		Order o = OrderParse.parse("0M30");
 		
 		Assert.assertTrue("MoveOrder expected", o instanceof MoveOrder );
+		Assert.assertEquals("Bad distance", 30, ((MoveOrder)o).distToMove);
 	}
 	
 	@Test public void execute() {

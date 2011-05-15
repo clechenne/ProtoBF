@@ -31,17 +31,19 @@ public class WeaponReader {
 		weap.penetration[1] = Integer.parseInt(tokens[6]);
 		weap.penetration[2] = Integer.parseInt(tokens[7]);
 		
-		String[] pos = new String[4];
+		String[] pos = new String[6];
 		i=0;
 		st = new StringTokenizer(tokens[8], "-");
 		while (st.hasMoreElements()) {
 			pos[i++] = st.nextToken();
 		}
-
+		
+		weap.positions = new char[i];
+		i=0;
+		
 		for (String s : pos) {
-			if (s!= null && s.length() > 0) {
-				Position p = Position.fromString(s);
-				weap.positions.add(p);
+			if (s!= null && s.length() == 1) {
+				weap.positions[i++] = s.charAt(0);
 			}
 		}
 		

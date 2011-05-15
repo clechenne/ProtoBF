@@ -6,7 +6,7 @@ public class TurnCalculator {
 	Point p0;
 	boolean turnPort ;
 	int distanceToTurn;
-	int TS_5_DIAMETER = 40;
+	int TS_5_RADIUS = 40;
 	
 	public int degree=-1;
 	
@@ -21,18 +21,26 @@ public class TurnCalculator {
 
 	public Point execute() {
 		
-		Point nP = new Point(0, 0 );
+		Point nP = new Point(0, 0);
 		
 		degree = Converter.distanceToDegree(distanceToTurn);
 		
-		double factorX = Math.sin(Math.toRadians(degree));
-		double factorY = Math.cos(Math.toRadians(degree));
+		double cos = Math.sin(Math.toRadians(degree));
+		double sin = Math.cos(Math.toRadians(degree));
 		
 		// TODO: delete sysout
-		System.out.println(degree + ", facX=" + factorX + ", facY=" + factorY);
-		nP.x = (int)(factorX * TS_5_DIAMETER + p0.x);
 		
-		nP.y = (int)((1-factorY) * TS_5_DIAMETER + p0.y);
+		
+		//nP.x = (int)(factorX * TS_5_DIAMETER + p0.x);
+		
+		if (! turnPort)
+			nP.x = (int)(TS_5_RADIUS * ( 1-cos) + p0.x);
+		else
+			nP.x = (int)( p0.x - TS_5_RADIUS * ( 1-cos));
+		
+		nP.y = (int)(sin * TS_5_RADIUS + p0.y);
+	
+		System.out.println(degree + ", cos=" + cos + ", sin=" + sin + ", x=" + nP.x + ", y=" + nP.y);
 		
 		return nP;
 	}

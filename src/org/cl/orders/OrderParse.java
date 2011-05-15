@@ -26,7 +26,22 @@ public class OrderParse {
 			move.distToMove = distance;
 			move.id = id;
 			o = move;
-		}
+		} else if ("P".equals(type)) {
+			Integer id = Integer.parseInt(m.group(1));
+			Integer target = Integer.parseInt(m.group(3));
+			TurnPortOrder move = new TurnPortOrder();
+			move.target = target;
+			move.id = id;
+			o = move;
+		} else if ("S".equals(type)) {
+			Integer id = Integer.parseInt(m.group(1));
+			Integer target = Integer.parseInt(m.group(3));
+			TurnStarboardOrder move = new TurnStarboardOrder();
+			move.target = target;
+			move.id = id;
+			o = move;
+			
+		} 
 		
 		return o;
 	}

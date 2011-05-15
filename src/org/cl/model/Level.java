@@ -1,5 +1,5 @@
 package org.cl.model;
 
 public enum Level {
-	GREAT, GOOD, NORMAL
+	GREAT, GOOD, NORMAL, POOR
 }

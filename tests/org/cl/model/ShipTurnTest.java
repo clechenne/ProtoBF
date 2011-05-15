@@ -7,7 +7,34 @@ import org.cl.utils.FactoryTest;
 import org.junit.Test;
 
 public class ShipTurnTest {
+
+	@Test public void turnStarboardHeagindInOneMove() {
 		
+		Ship ship = FactoryTest.newShip(0, 0, 18, 3);
+		
+		try {
+			ship.turnStarboard(30);
+			
+			ship.move(69);
+			
+		} catch (ShipMoveException e) {
+			// TODO Auto-generated catch block
+			throw new IllegalStateException(e);
+		}
+		
+		//System.out.println(ship.heading);
+		Assert.assertEquals("Bad new heading", 320, ship.heading);
+		
+		// next move, no turn
+		try {	
+			ship.move(69);
+		} catch (ShipMoveException e) {
+			// TODO Auto-generated catch block
+			throw new IllegalStateException(e);
+		}
+		Assert.assertEquals("Bad new heading", 270, ship.heading);
+	}
+	
 	@Test public void turnPortHeagindInOneMove() {
 		
 		Ship ship = FactoryTest.newShip(0, 0, 18, 3);
