@@ -34,7 +34,7 @@ public class ProtoGame extends Game {
 				
 		ships[1] = new Ship(2, Type.BB, 18);
 		ships[1].name = "Borodino";
-		ships[1].pos = new Point(200, 200);
+		ships[1].pos = new Point(600, 700);
 		ships[1].heading = 270;
 		ships[1].currentSpeedBox = 2;
 		ships[1].side = Side.RUSSIAN;

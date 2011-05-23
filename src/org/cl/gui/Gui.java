@@ -7,16 +7,13 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.RoundRectangle2D;
-import java.awt.image.AffineTransformOp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +31,6 @@ import org.cl.model.Ship;
 import org.cl.model.Side;
 import org.cl.orders.Order;
 import org.cl.orders.OrderParse;
-import org.cl.util.TurnCalculator;
 
 public class Gui {
     
@@ -52,13 +48,18 @@ public class Gui {
         JFrame f = new JFrame("BF1900");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         f.add(new SeaPanel());
-        f.setSize(600,400);
+        f.setSize(1000,800);
         f.setVisible(true);
     } 
 
 }
 
 class SeaPanel extends JPanel implements ActionListener {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	TurnRunner tr;
 	
@@ -284,23 +285,24 @@ class ShipView {
 //    	ga.draw(circle);
 //    	ga.draw(circle.getBounds());
         // drawing       
-        for (int d=0; d < 138; d+=10) {
-        	TurnCalculator tc = new TurnCalculator(new org.cl.model.Point(ship.pos.x, ship.pos.y), true, d);
-        	org.cl.model.Point p = tc.execute();
-        	Shape pC = new Ellipse2D.Float(p.x, p.y, 5, 5);
-        	ga.fill(pC);
-        	ga.setColor(Color.BLACK);
-        	ga.draw(pC);
-        }
-        
-        for (int d=0; d < 138; d+=10) {
-        	TurnCalculator tc = new TurnCalculator(new org.cl.model.Point(ship.pos.x, ship.pos.y), false, d);
-        	org.cl.model.Point p = tc.execute();
-        	Shape pC = new Ellipse2D.Float(p.x, p.y, 5, 5);
-        	ga.fill(pC);
-        	ga.setColor(Color.BLACK);
-        	ga.draw(pC);
-        }
+//        System.out.println(ship.name);
+//    	for (int d=0; d < 138; d+=10) {
+//        	TurnCalculator tc = new TurnCalculator(new org.cl.model.Point(ship.pos.x, ship.pos.y), true, d);
+//        	org.cl.model.Point p = tc.execute();
+//        	Shape pC = new Ellipse2D.Float(p.x, p.y, 5, 5);
+//        	ga.fill(pC);
+//        	ga.setColor(Color.BLACK);
+//        	ga.draw(pC);
+//        }
+//        
+//        for (int d=0; d < 138; d+=10) {
+//        	TurnCalculator tc = new TurnCalculator(new org.cl.model.Point(ship.pos.x, ship.pos.y), false, d);
+//        	org.cl.model.Point p = tc.execute();
+//        	Shape pC = new Ellipse2D.Float(p.x, p.y, 5, 5);
+//        	ga.fill(pC);
+//        	ga.setColor(Color.BLACK);
+//        	ga.draw(pC);
+//        }
         
         Font font = new Font("Serif", Font.BOLD, 9);
         ga.setFont(font);

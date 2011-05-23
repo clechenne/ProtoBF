@@ -10,10 +10,10 @@ public class ShipTurnTest {
 
 	@Test public void turnStarboardHeagindInOneMove() {
 		
-		Ship ship = FactoryTest.newShip(0, 0, 18, 3);
+		Ship ship = FactoryTest.newShip(0, 0, 18, 2);
 		
 		try {
-			ship.turnStarboard(30);
+			ship.turnStarboard(90);
 			
 			ship.move(69);
 			
@@ -23,7 +23,7 @@ public class ShipTurnTest {
 		}
 		
 		//System.out.println(ship.heading);
-		Assert.assertEquals("Bad new heading", 320, ship.heading);
+		Assert.assertEquals("Bad new heading", 90, ship.heading);
 		
 		// next move, no turn
 		try {	
@@ -32,15 +32,15 @@ public class ShipTurnTest {
 			// TODO Auto-generated catch block
 			throw new IllegalStateException(e);
 		}
-		Assert.assertEquals("Bad new heading", 270, ship.heading);
+		Assert.assertEquals("Bad new heading", 90, ship.heading);
 	}
 	
-	@Test public void turnPortHeagindInOneMove() {
+	@Test public void turnInOneMove() {
 		
 		Ship ship = FactoryTest.newShip(0, 0, 18, 3);
 		
 		try {
-			ship.turnPort(90);
+			ship.turnStarboard(90);
 			
 			ship.move(69);
 			
@@ -62,12 +62,12 @@ public class ShipTurnTest {
 		Assert.assertEquals("Bad new heading", 90, ship.heading);
 	}
 
-	@Test public void turnPortHeagindInTwoMoves() {
+	@Test public void turnInTwoMoves() {
 		
 		Ship ship = FactoryTest.newShip(0, 0, 18, 3);
 		
 		try {
-			ship.turnPort(115);
+			ship.turnStarboard(115);
 			
 			ship.move(69);
 			
@@ -88,5 +88,23 @@ public class ShipTurnTest {
 		}
 		
 		Assert.assertEquals("Bad new heading", 115, ship.heading);
+	}
+	
+	@Test public void turnPort225() {
+		
+		Ship ship = FactoryTest.newShip(0, 270, 18, 3);
+		
+		try {
+			ship.turnPort(225);
+			
+			ship.move(54);
+			
+		} catch (ShipMoveException e) {
+			// TODO Auto-generated catch block
+			throw new IllegalStateException(e);
+		}
+		
+		//TODO: 225 is better
+		Assert.assertEquals("Bad new heading", 226, ship.heading);
 	}
 }

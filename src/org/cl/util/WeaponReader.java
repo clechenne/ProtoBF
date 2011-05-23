@@ -3,7 +3,6 @@ package org.cl.util;
 import java.util.StringTokenizer;
 
 import org.cl.model.Category;
-import org.cl.model.Position;
 import org.cl.model.Weapon;
 
 public class WeaponReader {

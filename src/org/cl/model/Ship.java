@@ -40,6 +40,11 @@ public class Ship {
 	
 	public Weapon weapons[];
 	
+	public Ship gunFireTarget;
+
+	// H / A
+	public String ammo;
+	
 	public Ship(int id, Type type, int speed) {
 		this.id = id;
 		pos = new Point(0,0);
@@ -101,8 +106,14 @@ public class Ship {
 	}
 	
 	private int newPositionOnCircle(int realDistance) {
+		int diff = 0 ;
+		if (targetHeading < heading) {
+			diff = heading - targetHeading;
+		} else {
+			diff = targetHeading - heading;
+		}
 		
-		int distance = Converter.degreeToDistance(targetHeading-heading);
+		int distance = Converter.degreeToDistance(diff);
 		
 		int distanceForTurn = realDistance;
 		
@@ -117,7 +128,7 @@ public class Ship {
 		int oldHeading = heading;
 		
 		if (turnPort)
-			heading += tc.degree;
+			heading -= tc.degree;
 		else 
 			heading += tc.degree;
 		
@@ -157,6 +168,15 @@ public class Ship {
 
 	public int getCurrentSpeed() {
 		return speedBoxes[currentSpeedBox];
+	}
+
+	public void setGunFireTarget(Ship target) {
+		gunFireTarget = target;
+	}
+
+	public void setAmmo(String ammo) {
+		this.ammo = ammo;
+		
 	}
 
 
