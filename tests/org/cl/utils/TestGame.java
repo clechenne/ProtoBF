@@ -1,4 +1,4 @@
-package org.cl.gui;
+package org.cl.utils;
 
 import org.cl.model.Game;
 import org.cl.model.Level;
@@ -9,15 +9,15 @@ import org.cl.model.Type;
 import org.cl.model.Weapon;
 import org.cl.util.WeaponReader;
 
-public class ProtoGame extends Game {
+public class TestGame extends Game {
 	
-	public ProtoGame() {
+	public TestGame() {
 		
 		ships = new Ship[2];
 		
 		ships[0] = new Ship(0, Type.BB, 18);
 		ships[0].name = "Mikasa";
-		ships[0].pos = new PointBF(100, 100);
+		ships[0].pos = new PointBF(200, 200);
 		ships[0].heading = 45;
 		ships[0].currentSpeedBox = 2;
 		ships[0].side = Side.JAPENESE;

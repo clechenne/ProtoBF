@@ -15,5 +15,11 @@ public enum Damage {
 	DC,
 	T2,
 	S3,
-	DC2
+	DC2,
+	WI,
+	LT,
+	FU,
+	BR,
+	TT,
+	FL25
 }

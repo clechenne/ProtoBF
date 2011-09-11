@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cl.model.Game;
+import org.cl.model.Ship;
+import org.cl.orders.MoveOrder;
 import org.cl.orders.Order;
 import org.cl.orders.TurnPortOrder;
+import org.cl.orders.TurnStarboardOrder;
 
 public class TurnRunner {
 	private Game game;
@@ -19,7 +22,7 @@ public class TurnRunner {
 	}
 	
 	public void add(Order o) {
-		if (o instanceof TurnPortOrder) {
+		if (o instanceof TurnPortOrder || o instanceof TurnStarboardOrder) {
 			turns.add(o);
 		} else {
 			orders.add(o);
@@ -45,6 +48,14 @@ public class TurnRunner {
 					// TODO: refactor
 					t.printStackTrace();
 				}
+			}
+		} else {
+			// default order
+			for (Ship s : game.ships) {
+				MoveOrder o = new MoveOrder();
+				o.id = s.id;
+				o.distToMove = s.getCurrentSpeed();
+				o.execute(game);
 			}
 		}
 		

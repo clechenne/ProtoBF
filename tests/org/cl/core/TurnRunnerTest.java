@@ -14,7 +14,7 @@ public class TurnRunnerTest {
 	@Test
 	public void endTurn() {
 		Game game = FactoryTest.newGame();
-		
+		game.ships[0].heading = 45;
 		TurnRunner tr = new TurnRunner(game);
 		
 		Order o = OrderParse.parse("0M90");
@@ -22,9 +22,9 @@ public class TurnRunnerTest {
 		tr.end();
 		
 		Assert.assertEquals("Bad turn", 2, game.turn);
-		
-		Assert.assertEquals("Bad x position", 100, game.ships[0].pos.x);
-		Assert.assertEquals("Bad y position", 10, game.ships[0].pos.y);
+		// 128,72
+		Assert.assertEquals("Bad x position", 128, game.ships[0].pos.x);
+		Assert.assertEquals("Bad y position", 72, game.ships[0].pos.y);
 		Assert.assertEquals("Orders found", 0, tr.orders.size());
 	}
 }

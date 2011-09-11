@@ -30,8 +30,8 @@ public class OrderParse {
 			Integer id = Integer.parseInt(m.group(1));
 			Integer target = Integer.parseInt(m.group(3));
 			TurnPortOrder move = new TurnPortOrder();
-			if (target > 180)
-				target = 180;
+			if (target > 30)
+				target = 30;
 			move.target = target;
 			move.id = id;
 			o = move;
@@ -40,8 +40,8 @@ public class OrderParse {
 			Integer target = Integer.parseInt(m.group(3));
 			TurnStarboardOrder move = new TurnStarboardOrder();
 			
-			if (target > 180)
-				target = 180;
+			if (target > 30)
+				target = 30;
 			move.target = target;
 			move.id = id;
 			o = move;

@@ -17,7 +17,7 @@ public class TurnStarboardOrder implements Order {
 	}
 	
 	public String toString() {
-		return id + " turnPort " + target ;
+		return id + " STARBOARD " + target ;
 	}
 
 }

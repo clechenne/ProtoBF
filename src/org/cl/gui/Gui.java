@@ -12,8 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +27,7 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
 import org.cl.core.TurnRunner;
+import org.cl.model.PointBF;
 import org.cl.model.Ship;
 import org.cl.model.Side;
 import org.cl.orders.Order;
@@ -149,6 +150,7 @@ class SeaPanel extends JPanel implements ActionListener {
             // next
         	tr.end();
         	repaint();
+        	hintBar.setText("");
         }
     }
 
@@ -158,8 +160,7 @@ class SeaPanel extends JPanel implements ActionListener {
 		if (text.length() !=0) {
 			Order o = OrderParse.parse(textField.getText());
 			tr.add(o);
-		
-			hintBar.setText("<" + textField.getText() + ">");
+			hintBar.setText(hintBar.getText() + "<" + textField.getText() + ">");
 		} else {
 			hintBar.setText("no order");
 		}
@@ -171,40 +172,10 @@ class SeaPanel extends JPanel implements ActionListener {
     
     public void paintComponent(Graphics g) {
         super.paintComponent(g);       
-        //g.drawString("This is my custom Panel!",10,20);
         for (ShipView s : views) {
         	s.paintIt(g);
         }
-
-    }  
-}
-
-class Circle {
-
-    public final Point center;
-    public final double radius;
-
-    public Circle(Point center, double radius) {
-        this.center = center;
-        this.radius = radius;
-    }
-    
-    public Point toScreenPoint(Point center, int width, int height) {
-        int screenX = center.x + (width / 2);
-        int screenY = -(center.y - (height / 2));
-        return new Point(screenX, screenY);
-    }
-    
-    public void drawOn(Graphics g, int width, int height) {
-        // translate Cartesian(x,y) to Screen(x,y)
-        Point screenP = toScreenPoint(center, width, height);
-        int r = (int) Math.rint(radius);
-        g.drawOval((int) screenP.x - r, (int) screenP.y - r, r + r, r + r);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("{center=%s, radius=%.2f}", center, radius);
+        
     }
 }
 
@@ -250,71 +221,72 @@ class ShipView {
 
     public void paintIt(Graphics g){
     	Graphics2D ga = (Graphics2D)g;
-    	
-    	// current pos
-    	// Shape circle = new Ellipse2D.Float(ship.pos.x, ship.pos.y, RADIUS, RADIUS);
-    	
-    	RoundRectangle2D rect = new RoundRectangle2D.Float((float)ship.pos.x, (float)ship.pos.y, W, H, 2, 2);
-
-    	AffineTransform orig = ga.getTransform();
-    	// 
-    	AffineTransform transform = AffineTransform.getRotateInstance(Math.toRadians(ship.heading),rect.getCenterX(), rect.getCenterY() );
-    	ga.setTransform(transform);
-    	
-    	if (selected) {
-    		ga.setColor(Color.GREEN);
-    		ga.fill(rect);
+    	       
+       	if (selected) {
     		ga.setColor(Color.ORANGE);
-    		ga.draw(rect);
     	} else {
     		ga.setColor(getColor(ship.side));
-    		ga.fill(rect);
-    		ga.setColor(Color.BLACK);
-    		ga.draw(rect);  		
     	}
+       	
+       	ga.setFont(new Font("Serif", Font.PLAIN, 12));
+        ga.drawString("+", ship.pos.x, ship.pos.y);
+        //ga.setTransform(ga.getTransform());
         
-    	// moving circle
-//    	Shape circle = new Ellipse2D.Float(ship.pos.x+5, ship.pos.y-20, 40, 40);
-//    	
-//    	int x = (int) circle.getBounds2D().getCenterX();
-//    	int y = (int) circle.getBounds2D().getCenterY();
-//    	
-//    	ga.drawLine(x-50, y, x+50, y);
-//    	
-//    	ga.setColor(Color.BLACK);
-//    	ga.draw(circle);
-//    	ga.draw(circle.getBounds());
-        // drawing       
-//        System.out.println(ship.name);
-//    	for (int d=0; d < 138; d+=10) {
-//        	TurnCalculator tc = new TurnCalculator(new org.cl.model.Point(ship.pos.x, ship.pos.y), true, d);
-//        	org.cl.model.Point p = tc.execute();
-//        	Shape pC = new Ellipse2D.Float(p.x, p.y, 5, 5);
-//        	ga.fill(pC);
-//        	ga.setColor(Color.BLACK);
-//        	ga.draw(pC);
-//        }
-//        
-//        for (int d=0; d < 138; d+=10) {
-//        	TurnCalculator tc = new TurnCalculator(new org.cl.model.Point(ship.pos.x, ship.pos.y), false, d);
-//        	org.cl.model.Point p = tc.execute();
-//        	Shape pC = new Ellipse2D.Float(p.x, p.y, 5, 5);
-//        	ga.fill(pC);
-//        	ga.setColor(Color.BLACK);
-//        	ga.draw(pC);
-//        }
-        
-        Font font = new Font("Serif", Font.BOLD, 9);
-        ga.setFont(font);
-        ga.drawString(""+ship.id, ship.pos.x+5, ship.pos.y+H+10);
+    	AffineTransform orig = ga.getTransform();
+        AffineTransform transform = AffineTransform.getRotateInstance(Math.toRadians(0),ship.pos.x, ship.pos.y);
+    	ga.setTransform(transform);
+    	
+        ga.setFont(new Font("Serif", Font.BOLD, 9));
+        ga.drawString(ship.name, ship.pos.x+10, ship.pos.y);
         ga.setTransform(orig);
+        
+        PointBF [] points = ship.getPath().getAlls();
+        int idx = points.length;
+        PointBF end = ship.pos;
+        while (idx > 0) {
+        	PointBF start = points[idx-1]; 
+        	Line2D line = new Line2D.Float(end.x, end.y, start.x, start.y);
+        	ga.draw(line);
+        	end =  start;
+        	idx--;
+        }
+        
+       // draw circle center
+       PointBF centre =  ship.pos.compute(40, ship.heading+90);
+       ga.drawString("s", centre.x, centre.y);
+       System.out.println("STAR : ship.heading+90=" +  (ship.heading+90) + "," + centre);
+       
+       PointBF centreP =  ship.pos.compute(40, ship.heading-90);
+       ga.drawString("p", centreP.x, centreP.y);
+       System.out.println("PORT : ship.heading-90=" +  (ship.heading-90) + "," + centreP);
+       
+       int rot = (ship.heading-30);      
+       System.out.println("ship.heading" + ship.heading + ", rot="+rot);
+//       
+       double x1 = centreP.x +  (int)(40*Math.cos(Math.toRadians(rot)));
+       double y1 = centreP.y +  (int)(40*Math.sin(Math.toRadians(rot)));
+       ga.drawString("1", (int) x1, (int) y1);
+	   System.out.println(x1 + "," + y1);
+	   
+       for (int angle = 0; angle < 360; angle += 5) {
+    	   double x = centre.x +  (int)(40*Math.cos(Math.toRadians(angle)));
+    	   double y = centre.y +  (int)(40*Math.sin(Math.toRadians(angle)));
+    	   ga.drawString(".", (int) x, (int) y);
+       }
+       
+       for (int angle = 0; angle < 360; angle += 5) {
+    	   double x = centreP.x +  (int)(40*Math.cos(Math.toRadians(angle)));
+    	   double y = centreP.y +  (int)(40*Math.sin(Math.toRadians(angle)));
+    	   ga.drawString(".", (int) x, (int) y);
+       }
+       
     }
 
 	private Color getColor(Side side) {
 		if (side == Side.JAPENESE) {
 			return Color.RED;
 		} else if (side == Side.RUSSIAN) {
-			return Color.YELLOW;
+			return Color.BLACK;
 		}
 		return Color.BLACK;
 	}

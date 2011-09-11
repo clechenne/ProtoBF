@@ -30,8 +30,8 @@ public class Ship {
 	public int currentSpeedBox;
 	
 	// position
-	public Point oldPos;
-	public Point pos;
+	//public Point oldPos;
+	public PointBF pos;
 	public int heading;
 	public int targetHeading;
 	
@@ -45,45 +45,67 @@ public class Ship {
 	// H / A
 	public String ammo;
 	
+	// Historique des mvts
+	private Path path;
+	
 	public Ship(int id, Type type, int speed) {
 		this.id = id;
-		pos = new Point(0,0);
+		pos = new PointBF(0,0);
 		this.speed = speed;
 		
 		this.type = type;
 		
 		speedBoxes = SpeedBoxInit.execute(type, speed);
+		
+		path = new Path();
+		
 	}
 
 	public void move(int realDistance) throws ShipMoveException {
-		
-		int distanceToUse = realDistance;
 		
 		if (!check(realDistance)) {
 			throw new ShipMoveException("no more than one speedBox change");
 		}
 		
 		if (targetHeading > 0) {
-			distanceToUse -= newPositionOnCircle(realDistance);
+			
+			PointBF center =  null;
+			
+			int angle = 0;
+			
+			if (!turnPort) {
+				center = pos.compute(40, heading+90);
+				angle = -180 + heading + targetHeading;
+			} else {
+				center = pos.compute(40, heading-90);
+				angle = heading - targetHeading;
+			}
+					
+			System.out.println("center=" + center);			
+			System.out.println("heading=" + heading);			
+			System.out.println("angle="+angle);
+			
+			path.add(new PointBF(pos.x, pos.y));
+			pos.x = center.x +  (int)(40*Math.cos(Math.toRadians(angle)));
+			pos.y = center.y +  (int)(40*Math.sin(Math.toRadians(angle)));
+			
+			if (!turnPort) {
+				heading += targetHeading;
+			} else {
+				heading -= targetHeading;
+			}
+						
+			targetHeading = 0 ;
+			
+		} else {
+			path.add(new PointBF(pos.x, pos.y));
+			pos = pos.compute(realDistance, heading);
 		}
-		
-		double cos = Math.cos(Math.toRadians(heading));
-		double sin = Math.sin(Math.toRadians(heading));
-		
-		oldPos = new Point(pos.x, pos.y);
-				
-		if (heading <= 180) {
-			pos.x += (int) (realDistance*sin);
-			pos.y -= (int) (realDistance*cos);
-		} else if (heading <= 270) {
-			pos.x += (int) (realDistance*sin);
-			pos.y += (int) (realDistance*cos);
-		} else if (heading <= 360) {
-			pos.x += (int) (realDistance*sin);
-			pos.y -= (int) (realDistance*cos);
-		}
-		
-		System.out.println(""+ id + oldPos + "->" + pos);
+
+		System.out.println("*****");
+		System.out.println(path);
+		System.out.println(pos);
+		System.out.println("*****");
 		
 		// after moving speedBox can change
 		if (realDistance < speedBoxes[currentSpeedBox]) {
@@ -103,45 +125,6 @@ public class Ship {
 	public void turnStarboard(int target) {
 		targetHeading = target;
 		turnPort = false;
-	}
-	
-	private int newPositionOnCircle(int realDistance) {
-		int diff = 0 ;
-		if (targetHeading < heading) {
-			diff = heading - targetHeading;
-		} else {
-			diff = targetHeading - heading;
-		}
-		
-		int distance = Converter.degreeToDistance(diff);
-		
-		int distanceForTurn = realDistance;
-		
-		if (distance < realDistance) {
-			distanceForTurn = distance;
-		}
-		
-		TurnCalculator tc = new TurnCalculator(pos, turnPort, distanceForTurn);
-		
-		pos = tc.execute();
-		
-		int oldHeading = heading;
-		
-		if (turnPort)
-			heading -= tc.degree;
-		else 
-			heading += tc.degree;
-		
-		System.out.println("" + id + " degree:" + tc.degree);
-		System.out.println("" + id + " oHead:" + oldHeading + " -> " + heading);
-		
-		// is target Heading reached ?
-		if (targetHeading == heading) {
-			targetHeading = 0 ;
-		}
-		
-		return distanceForTurn;
-		
 	}
 
 	private boolean check(int realDistance) {
@@ -177,6 +160,10 @@ public class Ship {
 	public void setAmmo(String ammo) {
 		this.ammo = ammo;
 		
+	}
+
+	public Path getPath() {
+		return path;
 	}
 
 

@@ -27,7 +27,7 @@ public class MoveOrderTest {
 		Ship ship = game.ships[0];
 		
 		Assert.assertEquals("Bad position", 100, ship.pos.x);
-		Assert.assertEquals("Bad position", 10, ship.pos.y);
+		Assert.assertEquals("Bad position", 60, ship.pos.y);
 
 	}
 

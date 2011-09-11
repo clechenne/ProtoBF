@@ -17,7 +17,7 @@ public class TurnPortOrder implements Order {
 	}
 	
 	public String toString() {
-		return id + " turnPort " + target ;
+		return id + " PORT " + target ;
 	}
 
 }

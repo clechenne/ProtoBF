@@ -23,34 +23,34 @@ public class ShipMoveTest {
 	}
 	
 	@Test public void moveAheadHeading0() {
-		core(0, 18, 100, 10);
+		core(0, 18, 100, 60);
 	}
 
 	@Test public void moveAheadHeading45() {
-		core(45, 18, 163, 37);
+		core(45, 18, 128, 72);
 	}
 
 	@Test public void moveAheadHeading90() {		
-		core(90, 18, 190, 100);
+		core(90, 18, 140, 100);
 	}
 	
 	@Test public void moveAheadHeading135() {
-		core(135, 18, 163, 163);
+		core(135, 18, 128, 128);
 	}
 	
 	@Test public void moveAheadHeading180() {
-		core(180, 18, 100, 190);
+		core(180, 18, 100, 140);
 	}
 
 	@Test public void moveAheadHeading225() {
-		core(225, 18, 37, 37);
+		core(225, 18, 72, 128);
 	}
 	
 	@Test public void moveAheadHeading270() {
-		core(270, 18, 10, 100);
+		core(270, 18, 60, 100);
 	}
 	
 	@Test public void moveAheadHeading315() {
-		core(315, 18, 37, 37);
+		core(315, 18, 72, 72);
 	}
 }
